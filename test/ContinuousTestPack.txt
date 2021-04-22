@@ -1,6 +1,4 @@
 TestCheckpointingAndRestarting_RA.hpp
 TestICC3D_Longit.hpp
 TestICC3D_SaveLoad.hpp
-TestICC3D_SaveLoad_Test.hpp
-TestICC3D_Temp.hpp
-TestICC3D_v2.hpp
+TestICC3D.hpp
