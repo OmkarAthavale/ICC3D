@@ -232,14 +232,14 @@ public:
 
     	// Set Information for simulation
         HeartConfig::Instance()->SetSimulationDuration(20); //ms for one cycle 10,000
-        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 1); //timesteps: ode, pde, printing
+        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 5); //timesteps: ode, pde, printing
         HeartConfig::Instance()->SetSurfaceAreaToVolumeRatio(2000); // Ratio for each cell
         HeartConfig::Instance()->SetUseAbsoluteTolerance(2e-3); //Changed to get around the DIVERGED_ITS error default:2e-4
         HeartConfig::Instance()->SetCapacitance(3); // Membrane Capacitance
         HeartConfig::Instance()->SetBathConductivity(0.02); // Bath capacitance
 
 		// Set outputfile name
-        HeartConfig::Instance()->SetOutputDirectory("TestMesh3D_ICCDummyBath_20s_dt1ms_v0");
+        HeartConfig::Instance()->SetOutputDirectory("TestMesh3D_ICCDummyBath_20s_dt5ms_v1");
         HeartConfig::Instance()->SetOutputFilenamePrefix("results");
         HeartConfig::Instance()->SetVisualizeWithMeshalyzer(true); // Set for visualizing with Meshlab
 				//HeartConfig::Instance()->SetVisualizeWithCmgui(true);
