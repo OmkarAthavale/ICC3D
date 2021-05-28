@@ -167,8 +167,8 @@ public:
         // 'COARSENED' Mesh:
         //  TrianglesMeshReader<3,3> reader("projects/ICC_3D/test/Mesh/6465antrum_m05_ICC-MY_s8-29_surface_resempling10-box2.5-10pq1.5-10AV");
         // 'ORIGINAL' Mesh:
-        TrianglesMeshReader<3,3> reader("projects/mesh/ICC3D/icc-nonicc-bath.1");
-		//TrianglesMeshReader<3,3> reader("projects/ICC_Test/mesh/6465antrum_m05_ICC-MY_s8-29_surface_resempling10-box2.5-10pq1.5-10AV");
+        //TrianglesMeshReader<3,3> reader("projects/mesh/ICC3D/icc-nonicc-bath.1");
+	TrianglesMeshReader<3,3> reader("projects//mesh/ICC3D/6465antrum_m05_ICC-MY_s8-29_surface_resempling10-box2.5-10pq1.5-10AV");
 
         DistributedTetrahedralMesh<3,3> mesh; // Data shared among processes if run in parallel
         mesh.ConstructFromMeshReader(reader);
