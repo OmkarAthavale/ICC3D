@@ -239,7 +239,7 @@ public:
         HeartConfig::Instance()->SetBathConductivity(0.02); // Bath capacitance
 
 		// Set outputfile name
-        HeartConfig::Instance()->SetOutputDirectory("TestMesh3D_ICCDummyBath_20s_dt5ms_v1");
+        HeartConfig::Instance()->SetOutputDirectory("TestMesh3D_ICCDummyBath_4s_dt5ms_v1");
         HeartConfig::Instance()->SetOutputFilenamePrefix("results");
         HeartConfig::Instance()->SetVisualizeWithMeshalyzer(true); // Set for visualizing with Meshlab
 				//HeartConfig::Instance()->SetVisualizeWithCmgui(true);
