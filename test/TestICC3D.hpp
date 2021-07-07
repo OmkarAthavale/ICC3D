@@ -42,7 +42,7 @@ public:
         double x = pNode->rGetLocation()[0];
         double y = pNode->rGetLocation()[1];
 
-        double r = 100e-4; // set size of the radius
+        double r = 200e-4; // set size of the radius
 				double scale = 2e-4; // Set the same like for mesh.scale
 
         // Find all nodes which are ICC by reading the list
