@@ -30,13 +30,15 @@ class ICCCellFactory : public AbstractCardiacCellFactory<3>
 {
 private:
 	std::set<unsigned> setICCNode;
+    HistogramData& excitatory;
+    HistogramData& inhibitory;
 public:
-    ICCCellFactory(std::set<unsigned> iccNodes) //read list of ICC from the test
-        : AbstractCardiacCellFactory<3>(), setICCNode(iccNodes)
+    ICCCellFactory(std::set<unsigned> iccNodes, HistogramData& excitData, HistogramData& inhibData) //read list of ICC from the test
+        : AbstractCardiacCellFactory<3>(), setICCNode(iccNodes), excitatory(excitData), inhibitory(inhibData)
     {
     }
 
-    AbstractCardiacCell* CreateCardiacCellForTissueNode(Node<3>* pNode, HistogramData& excitData, HistogramData& inhibData)
+    AbstractCardiacCell* CreateCardiacCellForTissueNode(Node<3>* pNode)
 
     {
         // Define pacemaker region
@@ -245,7 +247,7 @@ public:
         HeartConfig::Instance()->SetBathConductivity(0.02); // Bath capacitance
 
 		// Set outputfile name
-        HeartConfig::Instance()->SetOutputDirectory("TestMesh3D_ICCDummyBath_100ms_dt5ms_v1");
+        HeartConfig::Instance()->SetOutputDirectory("TestMesh3D_ImtiazNeural");
         HeartConfig::Instance()->SetOutputFilenamePrefix("results");
         HeartConfig::Instance()->SetVisualizeWithMeshalyzer(true); // Set for visualizing with Meshlab
 				//HeartConfig::Instance()->SetVisualizeWithCmgui(true);
