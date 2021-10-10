@@ -240,7 +240,7 @@ public:
 
     	// Set Information for simulation
         HeartConfig::Instance()->SetSimulationDuration(20000); //ms for one cycle 10,000
-        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 5); //timesteps: ode, pde, printing
+        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 100); //timesteps: ode, pde, printing
         HeartConfig::Instance()->SetSurfaceAreaToVolumeRatio(2000); // Ratio for each cell
         HeartConfig::Instance()->SetUseAbsoluteTolerance(2e-3); //Changed to get around the DIVERGED_ITS error default:2e-4
         HeartConfig::Instance()->SetCapacitance(3); // Membrane Capacitance
