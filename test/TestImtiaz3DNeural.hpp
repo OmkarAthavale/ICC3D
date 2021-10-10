@@ -36,7 +36,7 @@ public:
     {
     }
 
-    AbstractCardiacCell* CreateCardiacCellForTissueNode(Node<3>* pNode)
+    AbstractCardiacCell* CreateCardiacCellForTissueNode(Node<3>* pNode, HistogramData& excitData, HistogramData& inhibData)
 
     {
         // Define pacemaker region
@@ -255,7 +255,7 @@ public:
         HistogramData iData = HistogramData("projects/NeuralData/hist_in_mean.txt", 20, 30, 1, 0.0639, 0.0639);
 
         // Initialize cell_factory
-        ICCCellFactory cell_factory(iccNodes);
+        ICCCellFactory cell_factory(iccNodes, eData, iData);
 
         // Declare the problem class, `BidomainProblem<3>`
         BidomainProblem<3> bidomain_problem( &cell_factory, true); // true indicates we are solving a bath problem
