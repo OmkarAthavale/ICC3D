@@ -2,3 +2,4 @@ TestICC3D_Longit.hpp
 TestICC3D_SaveLoad.hpp
 TestICC3D.hpp
 TestImtiaz3DNeural.hpp
+TestImtiaz3D.hpp
