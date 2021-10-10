@@ -57,8 +57,8 @@ public:
 
             SingleModParam E_K(new ModifiableParams("E_K", -70.0));
             SingleModParam eta(new ModifiableParams("eta", 0.0389));
-            SingleModParam excitatory_neural(new ModifiableParams("excitatory_neural", 0.000975);
-            SingleModParam inhibitory_neural(new ModifiableParams("inhibitory_neural", 1.2);
+            SingleModParam excitatory_neural(new ModifiableParams("excitatory_neural", 0.000975));
+            SingleModParam inhibitory_neural(new ModifiableParams("inhibitory_neural", 1.2));
 
             ModParamHolder modParams = {E_K, eta, excitatory_neural, inhibitory_neural} ;
 
@@ -240,7 +240,7 @@ public:
 
     	// Set Information for simulation
         HeartConfig::Instance()->SetSimulationDuration(20000); //ms for one cycle 10,000
-        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 5); //timesteps: ode, pde, printing
+        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 100); //timesteps: ode, pde, printing
         HeartConfig::Instance()->SetSurfaceAreaToVolumeRatio(2000); // Ratio for each cell
         HeartConfig::Instance()->SetUseAbsoluteTolerance(2e-3); //Changed to get around the DIVERGED_ITS error default:2e-4
         HeartConfig::Instance()->SetCapacitance(3); // Membrane Capacitance
