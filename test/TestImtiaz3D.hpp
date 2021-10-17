@@ -14,7 +14,7 @@
 #include "../src/NeuralComponents.hpp"
 #include "NeuralComponents.hpp"
 //#include "ChasteCuboid.hpp" //uncommend if using a circle shaped activation
-//#include "ChasteEllipsoid.hpp"
+#include "ChasteEllipsoid.hpp"
 
 #include <fstream>
 #include <vector>
@@ -41,9 +41,15 @@ public:
     AbstractCardiacCell* CreateCardiacCellForTissueNode(Node<3>* pNode)
 
     {
-        // Define pacemaker region
-        double x = pNode->rGetLocation()[0];
-        double y = pNode->rGetLocation()[1];
+        ChastePoint<3> centre(-6.0, -11.0, -31.0);
+        ChastePoint<3> radii(3.0, 3.0, 3.0);
+
+        ChasteEllipsoid<3> pacemaker(centre, radii);)
+
+        // // Define pacemaker region
+        // double x = pNode->rGetLocation()[0];
+        // double y = pNode->rGetLocation()[1];
+        // double z = pNode->rGetLocation()[2];
 
         double r = 200e-4; // set size of the radius
 				double scale = 2e-4; // Set the same like for mesh.scale
@@ -69,7 +75,7 @@ public:
             cell->SetParameter("cor", 1.0);
 
             // Active ICC Cells inside the pacemaker region (circle shaped over the whole z-depth)
-            if  (((x-302.25*scale)*(x-302.25*scale)+(y-302.25*scale)*(y-302.25*scale)) < r*r)
+            if  (pacemaker.DoesContain(pNode))
             //  for a quadratic pacemaker region: if (x>=(306.968*scale-100e-4) && y>=(307.1210*scale-100e-4))
             {
                 cell->SetParameter("E_K", -68.5);
@@ -87,83 +93,83 @@ public:
 };
 
 // *************************** CONDUCTIVITY MODIFIER ************************************* //
-class ICCConductivityModifier : public AbstractConductivityModifier<3,3>
-{
-private:
-    std::set<unsigned> setICCElement; //Copy list of Indexes with ICC attributes to this class
-    c_matrix<double, 3,3> mSpecialMatrix;
-    c_matrix<double, 3,3> mSpecialMatrix2;
-    c_matrix<double, 3,3> mSpecialMatrix3;
-    c_matrix<double, 3,3> mSpecialMatrix4;
+// class ICCConductivityModifier : public AbstractConductivityModifier<3,3>
+// {
+// private:
+//     std::set<unsigned> setICCElement; //Copy list of Indexes with ICC attributes to this class
+//     c_matrix<double, 3,3> mSpecialMatrix;
+//     c_matrix<double, 3,3> mSpecialMatrix2;
+//     c_matrix<double, 3,3> mSpecialMatrix3;
+//     c_matrix<double, 3,3> mSpecialMatrix4;
 
-public:
-    ICCConductivityModifier(std::set<unsigned> elementIndexesICC)
-        : AbstractConductivityModifier<3,3>(),
-          setICCElement(elementIndexesICC),
-          mSpecialMatrix( zero_matrix<double>(3,3) ),
-          mSpecialMatrix2( zero_matrix<double>(3,3) ),
-          mSpecialMatrix3( zero_matrix<double>(3,3) ),
-          mSpecialMatrix4( zero_matrix<double>(3,3) )
-          {
-            //Conductivities for ICC and Dummy (Bath conductivity is set at HeartConfig::Instance())
-            double intraICC = 0.024; // Intracellular ICC [mS/cm] = [S/m]*e-2
-            double extraICC = 0.036; // Extracellular ICC
-            double intraDummy = 0.02; // Intracellular Dummy
-            double extraDummy = 0.02; // Extracellular Dummy
+// public:
+//     ICCConductivityModifier(std::set<unsigned> elementIndexesICC)
+//         : AbstractConductivityModifier<3,3>(),
+//           setICCElement(elementIndexesICC),
+//           mSpecialMatrix( zero_matrix<double>(3,3) ),
+//           mSpecialMatrix2( zero_matrix<double>(3,3) ),
+//           mSpecialMatrix3( zero_matrix<double>(3,3) ),
+//           mSpecialMatrix4( zero_matrix<double>(3,3) )
+//           {
+//             //Conductivities for ICC and Dummy (Bath conductivity is set at HeartConfig::Instance())
+//             double intraICC = 0.024; // Intracellular ICC [mS/cm] = [S/m]*e-2
+//             double extraICC = 0.036; // Extracellular ICC
+//             double intraDummy = 0.02; // Intracellular Dummy
+//             double extraDummy = 0.02; // Extracellular Dummy
 
-			// Introducing faster propagation in x direction set mSpecialMatrix(0,0) higher
-			// e.g. intraICC + 0.05 and extraICC + 0.05
-              mSpecialMatrix(0,0) = intraICC; // Intracellular ICC Conductivities
-              mSpecialMatrix(1,1) = intraICC;
-              mSpecialMatrix(2,2) = intraICC;
+// 			// Introducing faster propagation in x direction set mSpecialMatrix(0,0) higher
+// 			// e.g. intraICC + 0.05 and extraICC + 0.05
+//               mSpecialMatrix(0,0) = intraICC; // Intracellular ICC Conductivities
+//               mSpecialMatrix(1,1) = intraICC;
+//               mSpecialMatrix(2,2) = intraICC;
 
-              mSpecialMatrix2(0,0) = extraICC; // Extracellular ICC Conductivities
-              mSpecialMatrix2(1,1) = extraICC;
-              mSpecialMatrix2(2,2) = extraICC;
+//               mSpecialMatrix2(0,0) = extraICC; // Extracellular ICC Conductivities
+//               mSpecialMatrix2(1,1) = extraICC;
+//               mSpecialMatrix2(2,2) = extraICC;
 
-              mSpecialMatrix3(0,0) = intraDummy; // Intracellular Dummy Conductivities
-              mSpecialMatrix3(1,1) = intraDummy;
-              mSpecialMatrix3(2,2) = intraDummy;
+//               mSpecialMatrix3(0,0) = intraDummy; // Intracellular Dummy Conductivities
+//               mSpecialMatrix3(1,1) = intraDummy;
+//               mSpecialMatrix3(2,2) = intraDummy;
 
-              mSpecialMatrix4(0,0) = extraDummy; // Extracellular Dummy Conductivities
-              mSpecialMatrix4(1,1) = extraDummy;
-              mSpecialMatrix4(2,2) = extraDummy;
+//               mSpecialMatrix4(0,0) = extraDummy; // Extracellular Dummy Conductivities
+//               mSpecialMatrix4(1,1) = extraDummy;
+//               mSpecialMatrix4(2,2) = extraDummy;
 
-          }
+//           }
 
-    c_matrix<double,3,3>& rCalculateModifiedConductivityTensor(unsigned elementIndex,
-                                                               const c_matrix<double,3,3>& rOriginalConductivity,
-                                                               unsigned domainIndex)
-    {
-        // Conductivities for ICC
-        // depending on the `domainIndex` (intra/extracellular).
-        if (setICCElement.find(elementIndex) != setICCElement.end())
-        {
-            if (domainIndex == 0) // domainIndex==0 implies intracellular
-            {
-                return mSpecialMatrix;
-            }
-            else //domain Index==1 implies extracellular
-            {
-                return mSpecialMatrix2;
-            }
+//     c_matrix<double,3,3>& rCalculateModifiedConductivityTensor(unsigned elementIndex,
+//                                                                const c_matrix<double,3,3>& rOriginalConductivity,
+//                                                                unsigned domainIndex)
+//     {
+//         // Conductivities for ICC
+//         // depending on the `domainIndex` (intra/extracellular).
+//         if (setICCElement.find(elementIndex) != setICCElement.end())
+//         {
+//             if (domainIndex == 0) // domainIndex==0 implies intracellular
+//             {
+//                 return mSpecialMatrix;
+//             }
+//             else //domain Index==1 implies extracellular
+//             {
+//                 return mSpecialMatrix2;
+//             }
 
-        }
-        // Conductivities for Dummy cells
-        else
-        {
-            if (domainIndex == 0) // domainIndex==0 implies intracellular
-            {
-                return mSpecialMatrix3;
-            }
-            else //domain Index==1 implies extracellular
-            {
-                return mSpecialMatrix4;
-            }
+//         }
+//         // Conductivities for Dummy cells
+//         else
+//         {
+//             if (domainIndex == 0) // domainIndex==0 implies intracellular
+//             {
+//                 return mSpecialMatrix3;
+//             }
+//             else //domain Index==1 implies extracellular
+//             {
+//                 return mSpecialMatrix4;
+//             }
 
-        }
-    }
-};
+//         }
+//     }
+// };
 
 // *************************** TEST ************************************* //
 class TestICC3D : public CxxTest::TestSuite
@@ -172,47 +178,69 @@ public:
     void TestMesh3D() //throw(Exception)
     {
         // Read mesh created by TetGen
-        // 'COARSENED' Mesh:
-        //  TrianglesMeshReader<3,3> reader("projects/ICC_3D/test/Mesh/6465antrum_m05_ICC-MY_s8-29_surface_resempling10-box2.5-10pq1.5-10AV");
-        // 'ORIGINAL' Mesh:
-        //TrianglesMeshReader<3,3> reader("projects/mesh/ICC3D/icc-nonicc-bath.1");
-	TrianglesMeshReader<3,3> reader("projects/mesh/ICC3D/6465antrum_m05_ICC-MY_s8-29_surface_resempling10-box2.5-10pq1.5-10AV");
+	    TrianglesMeshReader<3,3> reader("projects/mesh/ICC3D/sel_elem_cm_layer_ventCorpus");
 
         DistributedTetrahedralMesh<3,3> mesh; // Data shared among processes if run in parallel
         mesh.ConstructFromMeshReader(reader);
 
-        // Scale mesh from 512x512x22pix to 303.64x303.64x22um by 1e-4
-        mesh.Scale(2e-4, 2e-4, 2e-4); // double of original image size (because of the Jacobian and converging errors)
-        mesh.SetMeshHasChangedSinceLoading();
+        // Scale mesh from 512x512x22pix to 303.64x303.64x22um by 1e-4: not needed for rat stomach
+        // mesh.Scale(2e-4, 2e-4, 2e-4); // double of original image size (because of the Jacobian and converging errors)
+        // mesh.SetMeshHasChangedSinceLoading();
 
         // Create list with ICC indexes
         std::set<unsigned> iccNodes;
-        std::set<unsigned> elementIndexesICC;
+        // std::set<unsigned> elementIndexesICC;
 
-        // Iterating trough all Elements in the mesh and assigning attributes, conductivities and saving all ICC nodes
-        for (DistributedTetrahedralMesh<3,3>::ElementIterator iter = mesh.GetElementIteratorBegin();
-                        iter != mesh.GetElementIteratorEnd(); ++iter)
+
+        TRACE("3");
+        // Define boundary nodes
+        double eleIdentify = 0;
+        for (DistributedTetrahedralMesh<2,2>::ElementIterator iter = mesh.GetElementIteratorBegin(); iter != mesh.GetElementIteratorEnd();
+            ++iter)
         {
-            // Read Attributes
-            double attribute = iter->GetAttribute();
-
-            // Set all small islands in the mesh to Dummy cells
-            if (attribute != 1 && attribute != 2 && attribute != 3) // ICC=1(red), Dummy=2(green), Bath=3(blue)
+            eleIdentify = iter->GetAttribute();
+            if (eleIdentify == 1) // ICC=1 and Bath=0
             {
-                iter->SetAttribute(2);
-                attribute = iter->GetAttribute();
-            }
-
-            // Copy all nodes of the element to the elementIndexesICC list
-            if (attribute == 1) // Check if ICC node
-            {
-                elementIndexesICC.insert(iter->GetIndex());
-                for(int j = 0; j<=3; ++j)
+                if(!iter->GetNode(0)->IsBoundaryNode())
                 {
-                    iccNodes.insert(iter->GetNodeGlobalIndex(j));
+                    iccNodes.insert(iter->GetNodeGlobalIndex(0));
+                }
+                if(!iter->GetNode(1)->IsBoundaryNode())
+                {
+                    iccNodes.insert(iter->GetNodeGlobalIndex(1));
+                }
+                if(!iter->GetNode(2)->IsBoundaryNode())
+                {
+                    iccNodes.insert(iter->GetNodeGlobalIndex(2));
                 }
             }
         }
+
+
+        // // Iterating trough all Elements in the mesh and assigning attributes, conductivities and saving all ICC nodes
+        // for (DistributedTetrahedralMesh<3,3>::ElementIterator iter = mesh.GetElementIteratorBegin();
+        //                 iter != mesh.GetElementIteratorEnd(); ++iter)
+        // {
+        //     // Read Attributes
+        //     double attribute = iter->GetAttribute();
+
+        //     // Set all small islands in the mesh to Dummy cells
+        //     if (attribute != 1 && attribute != 2 && attribute != 3) // ICC=1(red), Dummy=2(green), Bath=3(blue)
+        //     {
+        //         iter->SetAttribute(2);
+        //         attribute = iter->GetAttribute();
+        //     }
+
+        //     // Copy all nodes of the element to the elementIndexesICC list
+        //     if (attribute == 1) // Check if ICC node
+        //     {
+        //         elementIndexesICC.insert(iter->GetIndex());
+        //         for(int j = 0; j<=3; ++j)
+        //         {
+        //             iccNodes.insert(iter->GetNodeGlobalIndex(j));
+        //         }
+        //     }
+        // }
 
         // Check that if we're in parallel no single process owns every element (to ensure that the conductivities
         // really are distributed).
@@ -240,14 +268,14 @@ public:
 
     	// Set Information for simulation
         HeartConfig::Instance()->SetSimulationDuration(20000); //ms for one cycle 10,000
-        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 5); //timesteps: ode, pde, printing
+        HeartConfig::Instance()->SetOdePdeAndPrintingTimeSteps(0.1, 1, 10); //timesteps: ode, pde, printing
         HeartConfig::Instance()->SetSurfaceAreaToVolumeRatio(2000); // Ratio for each cell
-        HeartConfig::Instance()->SetUseAbsoluteTolerance(2e-3); //Changed to get around the DIVERGED_ITS error default:2e-4
+        HeartConfig::Instance()->SetUseAbsoluteTolerance(2e-4); //Changed to get around the DIVERGED_ITS error default:2e-4
         HeartConfig::Instance()->SetCapacitance(3); // Membrane Capacitance
         HeartConfig::Instance()->SetBathConductivity(0.02); // Bath capacitance
 
 		// Set outputfile name
-        HeartConfig::Instance()->SetOutputDirectory("TestMesh3D_Imtiaz");
+        HeartConfig::Instance()->SetOutputDirectory("RatMesh3D_Imtiaz");
         HeartConfig::Instance()->SetOutputFilenamePrefix("results");
         HeartConfig::Instance()->SetVisualizeWithMeshalyzer(true); // Set for visualizing with Meshlab
 				//HeartConfig::Instance()->SetVisualizeWithCmgui(true);
@@ -273,13 +301,15 @@ public:
 
         // Set conductivities with the Conductivity Modifier for every element
         BidomainTissue<3>* p_bidomain_tissue = bidomain_problem.GetBidomainTissue();
-        ICCConductivityModifier modifier(elementIndexesICC); // Initialise Conductivity Modifier
-        p_bidomain_tissue->SetConductivityModifier( &modifier );
+        HeartConfig::Instance()->SetIntracellularConductivities(Create_c_vector(0.12, 0.12)); // these are quite smaller than cm values
+        HeartConfig::Instance()->SetExtracellularConductivities(Create_c_vector(0.2, 0.2)); // these are quite smaller than cm values
+        // ICCConductivityModifier modifier(elementIndexesICC); // Initialise Conductivity Modifier
+        // p_bidomain_tissue->SetConductivityModifier( &modifier );
 
         //Solve
         bidomain_problem.Solve();
 
-        // Switch on the output into log. For writing into file use "scons test-suite=<whatever> | tee output.txt"
+        // Switch on the output into log.
         HeartEventHandler::Headings();
         HeartEventHandler::Report();
     }
