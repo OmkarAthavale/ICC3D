@@ -264,7 +264,7 @@ public:
         // static unsigned ICC_id2 = 2; // Set Dummy (Comment for ICC-Bath simulation without Dummy)
         // ICC_ids.insert(ICC_id2);
 
-        HeartConfig::Instance()->SetTissueAndBathIdentifiers(ICC_ids, background_ids); // tissue and bath ids
+        // HeartConfig::Instance()->SetTissueAndBathIdentifiers(ICC_ids, background_ids); // tissue and bath ids
 
     	// Set Information for simulation
         HeartConfig::Instance()->SetSimulationDuration(20000); //ms for one cycle 10,000
@@ -288,7 +288,7 @@ public:
         ICCCellFactory cell_factory(iccNodes, eData, iData);
 
         // Declare the problem class, `BidomainProblem<3>`
-        BidomainProblem<3> bidomain_problem( &cell_factory, true); // true indicates we are solving a bath problem
+        BidomainProblem<3> bidomain_problem( &cell_factory, false); // true indicates we are solving a bath problem
 
         // When not used 'HeartConfig' for reading the mesh. Has to be called before Initialise
         bidomain_problem.SetMesh(&mesh);
