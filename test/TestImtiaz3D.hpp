@@ -44,7 +44,7 @@ public:
         ChastePoint<3> centre(-6.0, -11.0, -31.0);
         ChastePoint<3> radii(3.0, 3.0, 3.0);
 
-        ChasteEllipsoid<3> pacemaker(centre, radii);)
+        ChasteEllipsoid<3> pacemaker(centre, radii);
 
         // // Define pacemaker region
         // double x = pNode->rGetLocation()[0];
@@ -75,7 +75,7 @@ public:
             cell->SetParameter("cor", 1.0);
 
             // Active ICC Cells inside the pacemaker region (circle shaped over the whole z-depth)
-            if  (pacemaker.DoesContain(pNode))
+            if  (pacemaker.DoesContain(*pNode))
             //  for a quadratic pacemaker region: if (x>=(306.968*scale-100e-4) && y>=(307.1210*scale-100e-4))
             {
                 cell->SetParameter("E_K", -68.5);
@@ -195,7 +195,7 @@ public:
         TRACE("3");
         // Define boundary nodes
         double eleIdentify = 0;
-        for (DistributedTetrahedralMesh<2,2>::ElementIterator iter = mesh.GetElementIteratorBegin(); iter != mesh.GetElementIteratorEnd();
+        for (DistributedTetrahedralMesh<3,3>::ElementIterator iter = mesh.GetElementIteratorBegin(); iter != mesh.GetElementIteratorEnd();
             ++iter)
         {
             eleIdentify = iter->GetAttribute();
