@@ -288,7 +288,7 @@ public:
         ICCCellFactory cell_factory(iccNodes, eData, iData);
 
         // Declare the problem class, `BidomainProblem<3>`
-        BidomainProblem<3> bidomain_problem( &cell_factory, fals); // true indicates we are solving a bath problem
+        BidomainProblem<3> bidomain_problem( &cell_factory, false); // true indicates we are solving a bath problem
 
         // When not used 'HeartConfig' for reading the mesh. Has to be called before Initialise
         bidomain_problem.SetMesh(&mesh);
