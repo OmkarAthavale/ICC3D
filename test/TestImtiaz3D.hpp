@@ -75,10 +75,10 @@ public:
             cell->SetParameter("cor", 1.0);
 
             // Active ICC Cells inside the pacemaker region (circle shaped over the whole z-depth)
-            if  (pacemaker.DoesContain(*pNode))
+            if  (pacemaker.DoesContain(pNode->GetPoint()))
             //  for a quadratic pacemaker region: if (x>=(306.968*scale-100e-4) && y>=(307.1210*scale-100e-4))
             {
-                cell->SetParameter("E_K", -68.5);
+                cell->SetParameter("cor", 1.2);
             }
             //Sets ICC
             return cell;
