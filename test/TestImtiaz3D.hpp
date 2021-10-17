@@ -192,7 +192,6 @@ public:
         // std::set<unsigned> elementIndexesICC;
 
 
-        TRACE("3");
         // Define boundary nodes
         double eleIdentify = 0;
         for (DistributedTetrahedralMesh<3,3>::ElementIterator iter = mesh.GetElementIteratorBegin(); iter != mesh.GetElementIteratorEnd();
@@ -264,7 +263,7 @@ public:
         static unsigned ICC_id2 = 2; // Set Dummy (Comment for ICC-Bath simulation without Dummy)
         ICC_ids.insert(ICC_id2);
 
-        HeartConfig::Instance()->SetTissueAndBathIdentifiers(ICC_ids, background_ids); // tissue and bath ids
+        // HeartConfig::Instance()->SetTissueAndBathIdentifiers(ICC_ids, background_ids); // tissue and bath ids
 
     	// Set Information for simulation
         HeartConfig::Instance()->SetSimulationDuration(20000); //ms for one cycle 10,000
