@@ -251,7 +251,7 @@ public:
 
  // Setting Attributes
         std::set<unsigned> background_ids;
-        static unsigned background_id1 = 3; // Set Bath
+        static unsigned background_id1 = 0; // Set Bath
         background_ids.insert(background_id1);
         // Uncomment for only ICC and Bath:
         //static unsigned background_id2 = 2; // Set Dummy as Bath
@@ -261,8 +261,8 @@ public:
         std::set<unsigned> ICC_ids;
         static unsigned ICC_id1 = 1; // Set ICCs
         ICC_ids.insert(ICC_id1);
-        static unsigned ICC_id2 = 2; // Set Dummy (Comment for ICC-Bath simulation without Dummy)
-        ICC_ids.insert(ICC_id2);
+        // static unsigned ICC_id2 = 2; // Set Dummy (Comment for ICC-Bath simulation without Dummy)
+        // ICC_ids.insert(ICC_id2);
 
         HeartConfig::Instance()->SetTissueAndBathIdentifiers(ICC_ids, background_ids); // tissue and bath ids
 
