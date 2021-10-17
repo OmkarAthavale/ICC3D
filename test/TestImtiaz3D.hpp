@@ -272,7 +272,7 @@ public:
         HeartConfig::Instance()->SetSurfaceAreaToVolumeRatio(2000); // Ratio for each cell
         HeartConfig::Instance()->SetUseAbsoluteTolerance(2e-4); //Changed to get around the DIVERGED_ITS error default:2e-4
         HeartConfig::Instance()->SetCapacitance(3); // Membrane Capacitance
-        HeartConfig::Instance()->SetBathConductivity(0.02); // Bath capacitance
+        HeartConfig::Instance()->SetBathConductivity(0.8); // Bath capacitance
 
 		// Set outputfile name
         HeartConfig::Instance()->SetOutputDirectory("RatMesh3D_Imtiaz");
